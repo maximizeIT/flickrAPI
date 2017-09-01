@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+      <meta charset="utf-8" />
+      <meta content="IE=edge" http-equiv="X-UA-Compatible" />
+      <meta content="width=device-width, initial-scale=1" name="viewport" />
+      <title>
+          Flickr API Explorer
+      </title>
+      <link href="css/bootstrap.min.css" rel="stylesheet" />
+      <style type="text/css">
+          #ta {
+              border: 1px solid black;
+              padding: 10px 5px;
+              width: 100%;
+              max-width: 100%;
+              min-height: 250px;
+          }
+
+          #urlInfo {
+              margin-top: 10px;
+          }
+      </style>
+      <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+      <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+      <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+        <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+      <![endif]-->
+  </head>
+
+  <body>
+      <div class="container-fluid">
+          <div class="row">
+              <div class="col-xs-8 col-xs-offset-1">
+                  <h1 class="text-center">
+                      <small>simplified</small> flickr.photos.search  <small>(original <a href="https://www.flickr.com/services/api/explore/flickr.photos.search" target="_blank"><span class="glyphicon glyphicon-new-window" aria-hidden="true"></span></a> )</small>
+                  </h1>
+                  <form class="form-horizontal">
+                      <p class="text-center">
+                          <strong>
+                                  Arguments
+                              </strong>
+                      </p>
+                      <!--API key  -->
+                      <div class="form-group">
+                          <label class="col-sm-4 control-label" for="inputApiKey">
+                                  API key
+                              </label>
+                          <div class="col-sm-8">
+                              <input class="form-control" id="inputApiKey" placeholder="api key (required)" type="text" required>
+                              </input>
+                          </div>
+                      </div>
+                      <!--text  -->
+                      <div class="form-group">
+                          <label class="col-sm-4 control-label" for="inputText">
+                                  text
+                              </label>
+                          <div class="col-sm-8">
+                              <input class="form-control" id="inputText" placeholder="text" type="text">
+                              </input>
+                          </div>
+                      </div>
+                      <!--tags  -->
+                      <div class="form-group">
+                          <label class="col-sm-4 control-label" for="inputTags">
+                                  tags
+                              </label>
+                          <div class="col-sm-8">
+                              <input class="form-control" id="inputTags" placeholder="tags" type="text">
+                              </input>
+                          </div>
+                      </div>
+                      <!-- min_upload_date -->
+                      <div class="form-group">
+                          <label class="col-sm-4 control-label" for="inputMinUploadDate">
+                                  min_upload_date
+                              </label>
+                          <div class="col-sm-8">
+                              <input class="form-control" id="inputMinUploadDate" placeholder="min_upload_date" type="text">
+                              </input>
+                          </div>
+                      </div>
+                      <!-- max_upload_date -->
+                      <div class="form-group">
+                          <label class="col-sm-4 control-label" for="inputMaxUploadDate">
+                                  max_upload_date
+                              </label>
+                          <div class="col-sm-8">
+                              <input class="form-control" id="inputMaxUploadDate" placeholder="max_upload_date" type="text">
+                              </input>
+                          </div>
+                      </div>
+                      <!-- per_page -->
+                      <div class="form-group">
+                          <label class="col-sm-4 control-label" for="inputPerPage">
+                                  per_page
+                              </label>
+                          <div class="col-sm-8">
+                              <input class="form-control" id="inputPerPage" placeholder="per_page" type="text">
+                              </input>
+                          </div>
+                      </div>
+                      <!-- page -->
+                      <div class="form-group">
+                          <label class="col-sm-4 control-label" for="inputPage">
+                                  page
+                              </label>
+                          <div class="col-sm-8">
+                              <input class="form-control" id="inputPage" placeholder="page" type="text">
+                              </input>
+                          </div>
+                      </div>
+                      <!-- call signing -->
+                      <div class="form-group">
+                          <div class="col-sm-offset-4 col-sm-8">
+                              <div class="radio">
+                                  <label>
+                                          <input checked="" id="optionNotSigned" name="optionsSigning" type="radio" value="optionNotSigned">
+                                              Do not sign call?
+                                          </input>
+                                      </label>
+                              </div>
+                          </div>
+                      </div>
+                      <!-- comment -->
+                      <div class="form-group">
+                          <div class="col-sm-offset-4 col-sm-8">
+                              <span class="help-block" id="infoBlock">
+                                      Note: call and output via XML (REST) by default.
+                                  </span>
+                          </div>
+                      </div>
+                      <div class="form-group">
+                          <div class="col-sm-offset-4 col-sm-8">
+                              <button class="btn btn-default" id="btnCallMethod" type="button">
+                                      Call Method...
+                                  </button>
+                              <button class="btn btn-default" id="reset" type="button">
+                                      Reset
+                                  </button>
+                          </div>
+                      </div>
+                  </form>
+              </div>
+          </div>
+          <hr>
+          <div class="row">
+              <div class="col-md-12">
+                  <div id="results">
+                  </div>
+              </div>
+          </div>
+          </hr>
+      </div>
+      <!-- jQuery -->
+      <script src="js/jquery-3.2.1.min.js" type="text/javascript"></script>
+      <!-- Latest compiled and minified JavaScript for Bootstrap -->
+      <script src="js/bootstrap.min.js" type="text/javascript"></script>
+      <!-- Format output as XML in textarea (from: http://www.eslinstructor.net/vkbeautify/) -->
+      <script src="js/vkbeautify.js" type="text/javascript"></script>
+
+      <!-- custom code -->
+      <script>
+          $(document).ready(function() {
+              // function to check inputs and make API call
+              $('#btnCallMethod').click(function() {
+
+                  // check if API key is set
+                  if ($('#inputApiKey').val() == '') {
+                    // show error message
+                    $('#results').html('<div class="alert alert-danger alert-dismissible" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button><span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span><span class="sr-only">Error:</span> Please provide an API key.</div>');
+                      
+                    // remove error message
+                    $(".alert").fadeTo(2000, 500).slideUp(500, function() {
+                      $(".alert").slideUp(500);
+                    });
+                  } // check if at least one of the necessary arguments is set
+                  else if ($('#inputText').val() != '' || $('#inputTags').val() != '' || $('#inputMinUploadDate').val() != '' || $('#inputMaxUploadDate').val() != '') { 
+                      // base URL
+                      var apiUrlRest = "https://api.flickr.com/services/rest/?method=flickr.photos.search&format=rest";
+
+                      // API key for call
+                      var apiKey = $('#inputApiKey').val();
+                      if (apiKey != '') {
+                          apiUrlRest = apiUrlRest + "&api_key=" + apiKey;
+                      }
+
+                      // get arguments from inputs
+                      var text = $('#inputText').val();
+                      var tags = $('#inputTags').val();
+                      var min_upload_date = $('#inputMinUploadDate').val();
+                      var max_upload_date = $('#inputMaxUploadDate').val();
+                      var per_page = $('#inputPerPage').val();
+                      var page = $('#inputPage').val();
+                      var signingOption = $("input[name='optionsSigning']:checked").val();
+
+                      // check inputs and append to URL if value is set
+                      if (text != '') {
+                          apiUrlRest = apiUrlRest + "&text=" + text;
+                      }
+                      if (tags != '') {
+                          apiUrlRest = apiUrlRest + "&tags=" + tags;
+                      }
+                      if (min_upload_date != '') {
+                          apiUrlRest = apiUrlRest + "&min_upload_date=" + min_upload_date;
+                      }
+                      if (max_upload_date != '') {
+                          apiUrlRest = apiUrlRest + "&max_upload_date=" + max_upload_date;
+                      }
+                      if (per_page != '') {
+                          apiUrlRest = apiUrlRest + "&per_page=" + per_page;
+                      }
+                      if (page != '') {
+                          apiUrlRest = apiUrlRest + "&page=" + page;
+                      }
+
+                      // AJAX call
+                      $.ajax({
+                          url: apiUrlRest,
+                          dataType: 'xml',
+                          beforeSend: function() {
+                              // show info message
+                              $('#results').html('<div class="alert alert-info alert-dismissible" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button><span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span><span class="sr-only">Info:</span> Loading...</div>');
+                          },
+                          success: function(xml) {
+                              // remove info message
+                              $('#results').empty();
+                              // show success message
+                              $('#results').append('<div class="alert alert-success alert-dismissible" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button><span class="glyphicon glyphicon-ok-sign" aria-hidden="true"></span><span class="sr-only">Success:</span> Response received...</div>');
+                              // remove success message
+                              $(".alert").fadeTo(2000, 500).slideUp(500, function() {
+                                  $(".alert").slideUp(500);
+                              });
+
+                              // make XML as string for output in div
+                              if (window.ActiveXObject) { // IE
+                                  xmlString = xmlData.attr('xml');
+                              } else { // every normal browser
+                                  var oSerializer = new XMLSerializer();
+                                  var xmlString = oSerializer.serializeToString(xml);
+                              }
+                              
+                              // format output
+                              var formattedOutput = vkbeautify.xml(xmlString);
+                              
+                              // fill results div container with formatted XML output
+                              $("#results").append("<textarea id='ta'>" + formattedOutput + "</textarea>");
+                              
+                              // show URL
+                              $("#results").append("<p id='urlInfo'><strong>URL:</strong> <a target='_blank' href='" + apiUrlRest + "'>" + apiUrlRest + "</a></p>");
+                          },
+                          error: function() {
+                              // show error message
+                              $('#results').html('<div class="alert alert-danger alert-dismissible" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button><span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span><span class="sr-only">Error:</span> Error loading Flickr XML document...</div>');
+                              
+                              // remove error message
+                              $(".alert").fadeTo(2000, 500).slideUp(500, function() {
+                                  $(".alert").slideUp(500);
+                              });
+                          }
+                      });
+                  } else {
+                    // show error message
+                    $('#results').html('<div class="alert alert-danger alert-dismissible" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button><span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span><span class="sr-only">Error:</span> Please provide at least one of following arguments:<br/><ul><strong><li>text</li><li>tags</li><li>min_upload_date</li><li>max_upload_date</li></strong></ul></div>');
+                      
+                    // remove error message
+                    $(".alert").fadeTo(2000, 500).slideUp(500, function() {
+                      $(".alert").slideUp(500);
+                    });
+                  }
+              });
+              // function to reset form / site
+              $('#reset').click(function() {
+                // empty inputs
+                $('#inputApiKey').val('');
+                $('#inputText').val('');
+                $('#inputTags').val('');
+                $('#inputMinUploadDate').val('');
+                $('#inputMaxUploadDate').val('');
+                $('#inputPerPage').val('');
+                $('#inputPage').val('');
+                $('input:radio[name="optionsSigning"][id=optionNotSigned]').prop('checked', true);
+                
+                // empty output div
+                $('#results').empty();
+              });
+          });
+      </script>
+  </body>
+</html>
